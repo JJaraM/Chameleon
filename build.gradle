@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+group 'com.jjm'
+version '1.0.0'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+jar {
+    baseName = 'jjm-chameleon'
+    version =  '0.0.1'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'org.springframework:spring-beans:4.2.4.RELEASE'
+    compile 'org.springframework:spring-context:4.2.4.RELEASE'
+    compile 'org.hibernate:hibernate-core:5.1.0.Final'
+    compile 'org.aspectj:aspectjrt:1.8.8'
+    compile 'org.aspectj:aspectjweaver:1.8.8'
+    compile 'org.springframework:spring-aop:4.2.5.RELEASE'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://jtracking-sonatype.rhcloud.com/content/repositories/snapshots/") {
+                authentication(userName: "admin", password: "admin123")
+            }
+            pom.version = "1.0-SNAPSHOT"
+            pom.artifactId = "chameleon"
+            pom.groupId = "com.jjm"
+        }
+    }
+}
