@@ -34,7 +34,7 @@ public class ChameleonQueryManagerImpl implements ChameleonQueryManager {
                     atomicReference.set((T) object);
                 }
             }
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | NoSuchFieldException e) {
            System.err.println(e.getMessage());
         }
         return atomicReference.get();
@@ -44,7 +44,7 @@ public class ChameleonQueryManagerImpl implements ChameleonQueryManager {
         return fetch(ChameleonQueryManagerHelper.createQueryManager(sql, source), clazz);
     }
 
-    private <T> Object createObject(String alias, Object data, Class<T> clazz) throws InstantiationException, IllegalAccessException, NoSuchMethodException {
+    private <T> Object createObject(String alias, Object data, Class<T> clazz) throws InstantiationException, IllegalAccessException, NoSuchMethodException, NoSuchFieldException {
         Object object;
         if (data != null && Set.class.isAssignableFrom(data.getClass())) {
             Set<Object> items = (Set<Object>) data;
@@ -64,14 +64,14 @@ public class ChameleonQueryManagerImpl implements ChameleonQueryManager {
         return object;
     }
 
-    private void setObjectRelations(Field field, String fieldName, Object data, Object object) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+    private void setObjectRelations(Field field, String fieldName, Object data, Object object) throws IllegalAccessException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
         ChameleonProxy proxy = ProxyStrategy.getInstance(field, fieldName, data);
         if (proxy.getValue() != null && proxy.getClazz() != Void.TYPE) {
             ReflectionUtils.setValueField(field, object, getObjectRelationInstance(proxy, fieldName));
         }
     }
 
-    private Object getObjectRelationInstance(ChameleonProxy proxy, String fieldName) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+    private Object getObjectRelationInstance(ChameleonProxy proxy, String fieldName) throws IllegalAccessException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
         Object newInstance;
         if (proxy.getValue() instanceof Set) {
             newInstance = createSetCollection(proxy.getValue(), helper.getAlias(fieldName), proxy.getClazz());
@@ -81,7 +81,7 @@ public class ChameleonQueryManagerImpl implements ChameleonQueryManager {
         return newInstance;
     }
 
-    private <T> Set<Object> createSetCollection(Object items, String alias, Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+    private <T> Set<Object> createSetCollection(Object items, String alias, Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
         Set<Object> result = new LinkedHashSet<>();
         for (Object item : (Set) items) {
             result.add(createObject(alias, item, clazz));

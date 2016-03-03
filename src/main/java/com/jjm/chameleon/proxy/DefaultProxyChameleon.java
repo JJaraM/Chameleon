@@ -12,7 +12,7 @@ public class DefaultProxyChameleon implements ChameleonProxy {
     private Class<?> clazz;
     private ChameleonStrategy strategy;
 
-    public DefaultProxyChameleon(Field field, String fieldName, Object data) throws IllegalAccessException, InstantiationException {
+    public DefaultProxyChameleon(Field field, String fieldName, Object data) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
         value = ReflectionUtils.getFieldValue(fieldName, data);
         if (field.isAnnotationPresent(ChameleonAttr.class)) {
             clazz = field.getAnnotation(ChameleonAttr.class).type();

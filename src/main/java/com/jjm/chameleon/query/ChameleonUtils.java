@@ -20,4 +20,6 @@ public class ChameleonUtils {
     public static boolean isChameleon(Class<?> clazz) {
         return clazz.isAnnotationPresent(Chameleon.class);
     }
+
+
 }

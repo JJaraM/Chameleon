@@ -13,11 +13,14 @@ public class ChameleonApplication {
 
     private static ChameleonApplication instance;
     private static Map<Class, Class> map = new HashMap<>();
+    private static Class<?> mainClass;
 
     private ChameleonApplication(){}
 
     public static void run(Class<?> clazz) {
         ChameleonApplication applicationContext = getInstance();
+        applicationContext.setMainClass(clazz);
+
         if (clazz.isAnnotationPresent(ChameleonScan.class)) {
             ChameleonScan chameleonScan = clazz.getAnnotation(ChameleonScan.class);
             String[] basePackages = chameleonScan.basePackages();
@@ -36,6 +39,14 @@ public class ChameleonApplication {
             instance = new ChameleonApplication();
         }
         return  instance;
+    }
+
+    private void setMainClass(Class<?> clazz) {
+        mainClass = clazz;
+    }
+
+    public Class<?> getMainClass() {
+        return mainClass;
     }
 
     public void scan(String packageName) throws ClassNotFoundException {

@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 
 public class ProxyStrategy {
 
-    public static ChameleonProxy getInstance(Field field, String fieldName, Object data) throws InstantiationException, IllegalAccessException {
+    public static ChameleonProxy getInstance(Field field, String fieldName, Object data) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
         ChameleonProxy proxy = new DefaultProxyChameleon(field, fieldName, data);
         if (proxy.getValue() != null) {
             if (proxy.getValue() instanceof HibernateProxy ) {
