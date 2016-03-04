@@ -29,7 +29,7 @@ public class Factory {
 }
 ```
 
-As you can see we are creating a factory and passing the attributes to a new object, sometimes this task can be big because what happen if we want convert an object to DTO with 10 relations, we need to create 10 factories classes and set the desire attributes, and when we can to reuse the factory this can be difficult because not always we want to display the same attributes.
+As you can see we are creating a new factory and passing the attributes to create a new object, sometimes this task can be big because if we want to convert an object to DTO with **10** relations, we need to create **10** factories and set the desire attributes, and when we can to reuse the factory this can be difficult because not always we want to display the same attributes.
 
 With Chameleon the only thing that we need to do is to create a simple Repository class and define the attributes that we want to use as the next example:
 
@@ -47,6 +47,9 @@ And in the place that we want to use we need to inject the instance:
 
 ```java
 public class PlaceController {
+
+     @Resource private PlaceDTORepository placeDTORepository;
+     
      public Set<PlaceDTO> getList() {
           Set<Place> places = someMethodRetrieveAJPACollection(...);
           placeDTORepository.fetchNearPlacesByLocationName(places);
