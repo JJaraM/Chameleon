@@ -2,7 +2,7 @@ package com.jjm.chameleon.context;
 
 import com.jjm.chameleon.annotation.Chameleon;
 import com.jjm.chameleon.annotation.ChameleonScan;
-import com.jjm.chameleon.query.ChameleonUtils;
+import com.jjm.chameleon.query.component.ChameleonUtils;
 import com.jjm.chameleon.utils.ScannerUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import java.util.HashMap;

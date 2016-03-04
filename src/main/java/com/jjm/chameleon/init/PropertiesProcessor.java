@@ -28,7 +28,7 @@ public class PropertiesProcessor {
                     properties = new Properties();
                     properties.load(inputStream);
                 } catch (IOException e) {
-                    throw new FileNotFoundException("property file '" + FILE_NAME + "' not found in the classpath");
+                    throw new FileNotFoundException("Property file '" + FILE_NAME + "' not found in the classpath");
                 }
             }
         }

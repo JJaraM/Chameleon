@@ -1,7 +1,8 @@
-package com.jjm.chameleon.query;
+package com.jjm.chameleon.query.component;
 
 import com.jjm.chameleon.annotation.ChameleonAttr;
 import com.jjm.chameleon.context.ChameleonApplication;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -18,9 +19,9 @@ public class ChameleonQueryManagerHelper {
 
     private static Set<Class<?>> ret;
     private Set<String> columns;
-    private ChameleonQueryJoinTables joinTables;
+    private JoinTables joinTables;
 
-    public ChameleonQueryManagerHelper(ChameleonQuery query) {
+    public ChameleonQueryManagerHelper(Query query) {
         initializePrimitiveTypes();
         initializeColumns(query);
         initializeJoinTables(query);
@@ -46,7 +47,7 @@ public class ChameleonQueryManagerHelper {
         return ret;
     }
 
-    private void initializeColumns(ChameleonQuery query) {
+    private void initializeColumns(Query query) {
         columns = new HashSet<>();
         for(String column : query.select().columns().split(COLUMN_SEPARATOR)) {
             columns.add(column.trim());
@@ -57,15 +58,15 @@ public class ChameleonQueryManagerHelper {
         return columns;
     }
 
-    private void initializeJoinTables(ChameleonQuery query) {
+    private void initializeJoinTables(Query query) {
         joinTables = query.select().from().alias().joinTables();
     }
 
-    public ChameleonQueryJoinTables getJoinTables() {
+    public JoinTables getJoinTables() {
         return joinTables;
     }
 
-    public static <T> Class<T> getFistReference(ChameleonQuery query) {
+    public static <T> Class<T> getFistReference(Query query) {
         Class<?> clazz = query.select().from().getObject().getClass();
         if (Set.class.isAssignableFrom(clazz)) {
             Set<?> set = (Set<?>) query.select().from().getObject();
@@ -142,11 +143,11 @@ public class ChameleonQueryManagerHelper {
         return join;
     }
 
-    public static ChameleonQuery createQueryManager(String sql, Object source) {
+    public static Query createQueryManager(String sql, Object source) {
         String columns = textBetweenWords(sql, SELECT,  FROM);
         String[] fromClause = getFromClause(sql).split(SPACE);
-        ChameleonQuery query = new ChameleonQuery();
-        ChameleonQueryAlias aliasQuery = query.select(columns).from(source).alias(fromClause[1]);
+        Query query = new Query();
+        Alias aliasQuery = query.select(columns).from(source).alias(fromClause[1]);
         List<String> joins = getClauses(sql, JOIN);
         for (String join : joins) {
             String[] joinClauses = join.split(SPACE);

@@ -1,6 +1,9 @@
 package com.jjm.chameleon.query;
 
 import java.lang.reflect.Field;
+import com.jjm.chameleon.query.component.Query;
+import com.jjm.chameleon.query.component.ChameleonQueryManagerHelper;
+import com.jjm.chameleon.query.component.ChameleonUtils;
 import com.jjm.chameleon.support.proxy.VendorProxyAdapter;
 import com.jjm.chameleon.utils.ReflectionUtils;
 import org.springframework.stereotype.Component;
@@ -10,17 +13,17 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.jjm.chameleon.proxy.*;
 
 @Component
-public class ChameleonQueryManagerImpl implements ChameleonQueryManager {
+public class QueryManagerImpl implements QueryManager {
 
     private ChameleonQueryManagerHelper helper;
 
     @Override
-    public <T> T fetch(ChameleonQuery query) {
+    public <T> T fetch(Query query) {
         return fetch(query, null);
     }
 
     @Override
-    public <T> T fetch(ChameleonQuery query, Class<?> clazz) {
+    public <T> T fetch(Query query, Class<?> clazz) {
         AtomicReference<T> atomicReference = new AtomicReference<>();
         try {
             if (clazz == null) {

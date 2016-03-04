@@ -1,7 +1,7 @@
 package com.jjm.chameleon.repository;
 
 import com.jjm.chameleon.annotation.Query;
-import com.jjm.chameleon.query.ChameleonQueryManagerImpl;
+import com.jjm.chameleon.query.QueryManagerImpl;
 import com.jjm.chameleon.utils.ReflectionUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -39,7 +39,7 @@ public class ProxyRepository {
                 if (annotation.annotationType() == Query.class) {
                     Query query = (Query) annotation;
                     Class<?> clazz = ReflectionUtils.getClassOfParametrizedType(method);
-                    object = new ChameleonQueryManagerImpl().fetch(query.value(), args[0], clazz);
+                    object = new QueryManagerImpl().fetch(query.value(), args[0], clazz);
                     break;
                 }
             }

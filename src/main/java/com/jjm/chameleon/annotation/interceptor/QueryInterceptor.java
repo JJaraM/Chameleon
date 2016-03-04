@@ -1,7 +1,7 @@
 package com.jjm.chameleon.annotation.interceptor;
 
 import com.jjm.chameleon.annotation.Query;
-import com.jjm.chameleon.query.ChameleonQueryManager;
+import com.jjm.chameleon.query.QueryManager;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
 @Component
 public class QueryInterceptor {
 
-    @Resource private ChameleonQueryManager chameleonQueryManager;
+    @Resource private QueryManager chameleonQueryManager;
 
     @Pointcut("execution(@com.jjm.chameleon.annotation.Query * *.*(..))")
     public void query(){}
