@@ -30,6 +30,9 @@ apply plugin: 'java'
 
 repositories {
     mavenCentral()
+    maven {
+        url "http://jtracking-sonatype.rhcloud.com/content/repositories/snapshots"
+    }
 }
 
 dependencies {
@@ -40,6 +43,7 @@ dependencies {
     compile 'org.aspectj:aspectjrt:1.8.8'
     compile 'org.aspectj:aspectjweaver:1.8.8'
     compile 'org.springframework:spring-aop:4.2.5.RELEASE'
+    compile 'com.jjm:chameleon-jpa-support:1.0-SNAPSHOT'
 }
 
 task wrapper(type: Wrapper) {

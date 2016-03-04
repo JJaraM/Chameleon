@@ -1,6 +1,7 @@
 package com.jjm.chameleon.query;
 
 import java.lang.reflect.Field;
+import com.jjm.chameleon.support.proxy.VendorProxyAdapter;
 import com.jjm.chameleon.utils.ReflectionUtils;
 import org.springframework.stereotype.Component;
 import java.util.LinkedHashSet;
@@ -65,13 +66,13 @@ public class ChameleonQueryManagerImpl implements ChameleonQueryManager {
     }
 
     private void setObjectRelations(Field field, String fieldName, Object data, Object object) throws IllegalAccessException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
-        ChameleonProxy proxy = ProxyStrategy.getInstance(field, fieldName, data);
+        VendorProxyAdapter proxy = ChameleonVendorAdapterStrategy.getInstance(field, fieldName, data);
         if (proxy.getValue() != null && proxy.getClazz() != Void.TYPE) {
             ReflectionUtils.setValueField(field, object, getObjectRelationInstance(proxy, fieldName));
         }
     }
 
-    private Object getObjectRelationInstance(ChameleonProxy proxy, String fieldName) throws IllegalAccessException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
+    private Object getObjectRelationInstance(VendorProxyAdapter proxy, String fieldName) throws IllegalAccessException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
         Object newInstance;
         if (proxy.getValue() instanceof Set) {
             newInstance = createSetCollection(proxy.getValue(), helper.getAlias(fieldName), proxy.getClazz());
