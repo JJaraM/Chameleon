@@ -16,8 +16,7 @@ import static java.lang.reflect.Proxy.newProxyInstance;
 public class ProxyRepository {
 
     public <T> T getInstance(Class<T> clazz) {
-        ProxyFactory proxyFactory = getProxyFactory(clazz);
-        Object proxy = proxyFactory.getProxy();
+        Object proxy = getProxyFactory(clazz).getProxy();
         T instance = null;
         if (proxy != null) {
             instance = (T) proxy;

@@ -52,9 +52,9 @@ public class ScannerUtils {
         }
 
         /**
-         * Override the method isCandidateComponent to validate only the interfaces clases
-         * @param beanDefinition
-         * @return
+         * Override the method isCandidateComponent to validate only the interfaces classes
+         * @param beanDefinition to validate if is an interface
+         * @return a {@link Boolean} with the status, if the value is <code>TRUE</code> is an interface is the value is <code>FALSE</code> is not an interface
          */
         @Override
         protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {

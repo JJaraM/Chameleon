@@ -21,7 +21,7 @@ public class ReflectionUtils {
      *
      * @param fieldName to search
      * @param data to extract the value
-     * @return
+     * @return the value in the field
      */
     public static Object getFieldValue(String fieldName, Object data)  {
         Assert.notNull(fieldName, "field name must not be null");

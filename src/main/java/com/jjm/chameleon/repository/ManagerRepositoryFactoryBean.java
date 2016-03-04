@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * Class that manage the all logic to create repository proxy instances
  */
-public class ChameleonManagerRepositoryFactoryBean {
+public class ManagerRepositoryFactoryBean {
 
     /**
      * Run the process to create new proxy objects
