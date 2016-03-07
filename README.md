@@ -93,17 +93,15 @@ As you can see we are adding a little of complexity to our factory, because can 
 As you saw in the last section we had the problem to create to many methods in a factory, the propose to chameleon is manage this creation using a similar sintax as SQL, we can use this query and select the fields that we want and ignore the all complexity of object creation.
 
 ```java
-@Repository
 public interface PlaceDTORepository {
      @Query("SELECT C.model, C.year, C.id, M.id FROM Car c JOIN Motor M")
      Set<PlaceDTO> fetchCollection(Set<Car> cars);
 }
 ```
 
-As you saw the only thing that we need is to create a simple interface and add the annotation @Repository, add out expected result and the object to convert, and what happend if we want to ignore car's years? It's easy we only need to remove the **C.year** column from the query
+As you saw the only thing that we need is to create a simple interface, add the expected result and the columns that we want to display.
 
 ```java
-@Repository
 public interface CarDTORepository {
      @Query("SELECT C.model, C.year, C.id, M.id FROM Car c JOIN Motor M")
      Set<PlaceDTO> fetchCollection(Set<Car> cars);
