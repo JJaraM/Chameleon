@@ -42,13 +42,39 @@ public class ScannerUtils {
         return new AnnotationProvider(annotation).findCandidateComponents(packageName);
     }
 
+    public static Set<BeanDefinition> scanInterfacesClasses(String packageName) {
+        return new InterfaceProvider().findCandidateComponents(packageName);
+    }
+
     /**
      * Implementation used to found the beans that have an specific annotation
      */
     static class AnnotationProvider extends ClassPathScanningCandidateComponentProvider {
+
         public AnnotationProvider(Annotation annotation) {
             super(false);
             addIncludeFilter(new AnnotationTypeFilter(annotation.annotationType(), false));
+        }
+
+        /**
+         * Override the method isCandidateComponent to validate only the interfaces classes
+         * @param beanDefinition to validate if is an interface
+         * @return a {@link Boolean} with the status, if the value is <code>TRUE</code> is an interface is the value is <code>FALSE</code> is not an interface
+         */
+        @Override
+        protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+            return beanDefinition.getMetadata().isInterface();
+        }
+    }
+
+    /**
+     * Implementation to found interface beans
+     */
+    static class InterfaceProvider extends ClassPathScanningCandidateComponentProvider {
+
+        public InterfaceProvider() {
+            super(false);
+            addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
         }
 
         /**

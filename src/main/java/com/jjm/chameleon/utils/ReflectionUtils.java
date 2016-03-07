@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import com.jjm.chameleon.annotation.Serializer;
 import com.jjm.chameleon.exceptions.AccessorException;
 import org.springframework.util.Assert;
 
@@ -73,7 +75,20 @@ public class ReflectionUtils {
         Assert.hasLength(fieldName, "field name must not be empty");
         Assert.notNull(field, "field must not be null");
         Assert.notNull(object, "object must not be null");
-        setValueField(field, object, getFieldValue(fieldName, data));
+        Object value = getFieldValue(fieldName, data);;
+        if (field.isAnnotationPresent(Serializer.class)) {
+            Serializer serializer = field.getAnnotation(Serializer.class);
+            Class<? extends InterceptorSerializer> clazz = serializer.value();
+            try {
+                InterceptorSerializer interceptorSerializer = clazz.newInstance();
+                value = interceptorSerializer.getValue(value);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        setValueField(field, object, value);
     }
 
     /**

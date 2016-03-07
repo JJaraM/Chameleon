@@ -1,5 +1,7 @@
 package com.jjm.chameleon.repository;
 
+import com.jjm.chameleon.annotation.Datasource;
+import com.jjm.chameleon.annotation.Param;
 import com.jjm.chameleon.annotation.Query;
 import com.jjm.chameleon.query.QueryManagerImpl;
 import com.jjm.chameleon.utils.ReflectionUtils;
@@ -11,6 +13,10 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.HashMap;
+import java.util.Map;
+
 import static java.lang.reflect.Proxy.newProxyInstance;
 
 public class ProxyRepository {
@@ -35,11 +41,25 @@ public class ProxyRepository {
         Object object = null;
         try {
             Annotation[] annotations = method.getAnnotations();
+            Parameter[] parameters = method.getParameters();
+            Map<String, Object> params = new HashMap<>();
+            for (int i=0; i< parameters.length; i++) {
+                Parameter parameter = parameters[i];
+                if (parameter.isAnnotationPresent(Datasource.class)) {
+                    params.put("DATA_SOURCE", args[i]);
+                } else if (parameter.isAnnotationPresent(Param.class)) {
+                    Param param = parameter.getAnnotation(Param.class);
+                    params.put(param.value(), args[i]);
+                }
+            }
             for (Annotation annotation : annotations) {
                 if (annotation.annotationType() == Query.class) {
                     Query query = (Query) annotation;
                     Class<?> clazz = ReflectionUtils.getClassOfParametrizedType(method);
-                    object = new QueryManagerImpl().fetch(query.value(), args[0], clazz);
+                    if (clazz == null) {
+                        clazz = method.getReturnType();
+                    }
+                    object = new QueryManagerImpl().fetch(query.value(), params, clazz);
                     break;
                 }
             }

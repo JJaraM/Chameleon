@@ -109,7 +109,13 @@ public class ChameleonQueryManagerHelper {
 
     public static String getFromClause(String str) {
         List<String> from = getClauses(str, FROM);
-        return from.get(0).substring(0, from.get(0).indexOf(JOIN)).trim();
+        String table;
+        if (str.contains(JOIN)) {
+            table = from.get(0).substring(0, from.get(0).indexOf(JOIN)).trim();
+        } else {
+            table = from.get(0).trim();
+        }
+        return table;
     }
 
     private static List<Integer> findOccurrences(String str, String findStr) {

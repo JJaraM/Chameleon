@@ -8,6 +8,7 @@ import com.jjm.chameleon.support.proxy.VendorProxyAdapter;
 import com.jjm.chameleon.utils.ReflectionUtils;
 import org.springframework.stereotype.Component;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import com.jjm.chameleon.proxy.*;
@@ -46,6 +47,11 @@ public class QueryManagerImpl implements QueryManager {
 
     public <T> T fetch(String sql, Object source, Class<?> clazz) {
         return fetch(ChameleonQueryManagerHelper.createQueryManager(sql, source), clazz);
+    }
+
+    @Override
+    public <T> T fetch(String sql, Map<String, Object> params, Class<?> clazz) {
+        return fetch(ChameleonQueryManagerHelper.createQueryManager(sql, params.get("DATA_SOURCE")), clazz);
     }
 
     private <T> Object createObject(String alias, Object data, Class<T> clazz) throws InstantiationException, IllegalAccessException, NoSuchMethodException, NoSuchFieldException {

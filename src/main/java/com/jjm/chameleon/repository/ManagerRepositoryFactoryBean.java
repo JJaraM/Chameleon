@@ -5,7 +5,6 @@
 package com.jjm.chameleon.repository;
 
 import com.jjm.chameleon.annotation.EnableChameleonRepository;
-import com.jjm.chameleon.annotation.Repository;
 import com.jjm.chameleon.context.ChameleonApplication;
 import com.jjm.chameleon.exceptions.AccessorException;
 import com.jjm.chameleon.utils.ScannerUtils;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
@@ -45,14 +43,11 @@ public class ManagerRepositoryFactoryBean {
      * @param beanFactory used to register new beans
      */
     private void createProxyObjects(String packageName, ConfigurableListableBeanFactory beanFactory) {
-        Annotation annotation = () -> Repository.class;
-        final Set<BeanDefinition> classes = ScannerUtils.scanInterfacesByAnnotation(packageName, annotation);
+        final Set<BeanDefinition> classes = ScannerUtils.scanInterfacesClasses(packageName);
         for (BeanDefinition bean: classes) {
             try {
                 Class<?> clazz = Class.forName(bean.getBeanClassName());
-                if (clazz.isAnnotationPresent(annotation.annotationType())) {
-                    beanFactory.registerSingleton(clazz.getCanonicalName(), new ProxyRepository().getInstance(clazz));
-                }
+                beanFactory.registerSingleton(clazz.getCanonicalName(), new ProxyRepository().getInstance(clazz));
             } catch (ClassNotFoundException e) {
                 throw new AccessorException("There is not any class with the name " + bean.getBeanClassName(), e);
             }

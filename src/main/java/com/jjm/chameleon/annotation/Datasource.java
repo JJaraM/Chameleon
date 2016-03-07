@@ -1,12 +1,10 @@
 package com.jjm.chameleon.annotation;
 
-import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
 @Documented
-@Component
-public @interface Repository {
-
+public @interface Datasource {
+   
 }
