@@ -11,7 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 public class ChameleonVendorAdapterStrategy {
 
     public static VendorProxyAdapter getInstance(Field field, String fieldName, Object data) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
-        VendorProxyAdapter proxy = new DefaultProxyChameleon(field, fieldName, data);
+        VendorProxyAdapter defaultProxyChameleon = new DefaultProxyChameleon(field, fieldName, data);
+        VendorProxyAdapter proxy = defaultProxyChameleon;
         if (proxy.getValue() != null) {
             try {
                 String vendorAdapter = PropertiesProcessor.getInstance().getProperties().getProperty(PropertiesProcessor.JPA_PROPERTIES_PROXY_VENDOR_ADAPTER);
@@ -20,6 +21,9 @@ public class ChameleonVendorAdapterStrategy {
                         Class<?> clazz = Class.forName(vendorAdapter);
                         Constructor<?> constructor = clazz.getConstructor(Object.class, Field.class);
                         proxy = (VendorProxyAdapter) constructor.newInstance(new Object[] { proxy.getValue(), field });
+                        if (proxy.getClazz() == null || proxy.getValue() == null) {
+                            proxy = defaultProxyChameleon;
+                        }
                     } catch (ClassNotFoundException e) {
                        throw new MissingDependencyException("Missing " +
                                "com.jjm:chameleon-jpa-support-hibernate" +
