@@ -10,7 +10,9 @@ public class ChameleonUtils {
         Class<?> clazz = query.select().from().getObject().getClass();
         if (Set.class.isAssignableFrom(clazz)) {
             Set<?> set = (Set<?>) query.select().from().getObject();
-            clazz = set.iterator().next().getClass();
+            if (set.iterator().hasNext()) {
+                clazz = set.iterator().next().getClass();
+            }
         }
         Annotation annotation = ((Class) object).getAnnotation(Chameleon.class);
         Chameleon chameleon = (Chameleon) annotation;
