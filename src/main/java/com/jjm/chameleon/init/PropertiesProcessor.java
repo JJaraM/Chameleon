@@ -35,5 +35,9 @@ public class PropertiesProcessor {
         return properties;
     }
 
+    public String getProperty(final String key) throws FileNotFoundException {
+        return getProperties().getProperty(key);
+    }
+
 
 }

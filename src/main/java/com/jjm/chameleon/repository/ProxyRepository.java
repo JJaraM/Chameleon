@@ -1,6 +1,6 @@
 package com.jjm.chameleon.repository;
 
-import com.jjm.chameleon.annotation.Datasource;
+import com.jjm.chameleon.annotation.DataSource;
 import com.jjm.chameleon.annotation.Param;
 import com.jjm.chameleon.annotation.Query;
 import com.jjm.chameleon.query.QueryManagerImpl;
@@ -45,7 +45,7 @@ public class ProxyRepository {
             Map<String, Object> params = new HashMap<>();
             for (int i=0; i< parameters.length; i++) {
                 Parameter parameter = parameters[i];
-                if (parameter.isAnnotationPresent(Datasource.class)) {
+                if (parameter.isAnnotationPresent(DataSource.class)) {
                     params.put("DATA_SOURCE", args[i]);
                 } else if (parameter.isAnnotationPresent(Param.class)) {
                     Param param = parameter.getAnnotation(Param.class);

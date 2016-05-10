@@ -24,7 +24,7 @@ public class JoinTables {
     }
 
     public void put(String instanceName, Join queryJoin) {
-        joinTable.put(instanceName.toLowerCase(), queryJoin);
+        joinTable.put(instanceName, queryJoin);
     }
 
     public Join get(String instanceName){

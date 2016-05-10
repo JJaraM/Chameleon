@@ -21,8 +21,8 @@ public class Alias {
     public Join join(String joinName) {
         join = new Join();
         join.setJoin(joinName);
-        chameleonQueryJoinTables.put(joinName.toLowerCase(), join);
-        return chameleonQueryJoinTables.get(joinName.toLowerCase());
+        chameleonQueryJoinTables.put(joinName, join);
+        return join;
     }
 
     protected JoinTables joinTables() {

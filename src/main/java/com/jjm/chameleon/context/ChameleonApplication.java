@@ -17,32 +17,25 @@ public class ChameleonApplication {
 
     private ChameleonApplication(){}
 
-    public static void run(Class<?> clazz) {
-        ChameleonApplication applicationContext = getInstance();
-        applicationContext.setMainClass(clazz);
+    public static ChameleonApplication getInstance() {
+        if (instance == null)
+            instance = new ChameleonApplication();
+        return  instance;
+    }
 
+    public void run(Class<?> clazz) {
+        mainClass = clazz;
         if (clazz.isAnnotationPresent(ChameleonScan.class)) {
             ChameleonScan chameleonScan = clazz.getAnnotation(ChameleonScan.class);
             String[] basePackages = chameleonScan.basePackages();
             for (String basePackage : basePackages) {
                 try {
-                    applicationContext.scan(basePackage);
+                    getInstance().scan(basePackage);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
-    }
-
-    public static ChameleonApplication getInstance() {
-        if (instance == null) {
-            instance = new ChameleonApplication();
-        }
-        return  instance;
-    }
-
-    private void setMainClass(Class<?> clazz) {
-        mainClass = clazz;
     }
 
     public Class<?> getMainClass() {
@@ -53,10 +46,8 @@ public class ChameleonApplication {
         final Set<BeanDefinition> classes = ScannerUtils.scan(packageName);
         for (BeanDefinition bean: classes) {
             Class<?> clazz = Class.forName(bean.getBeanClassName());
-            if (ChameleonUtils.isChameleon(clazz)) {
-                Chameleon chameleon = clazz.getAnnotation(Chameleon.class);
-                map.put(chameleon.type(), clazz);
-            }
+            if (ChameleonUtils.isChameleon(clazz))
+                map.put(clazz.getAnnotation(Chameleon.class).type(), clazz);
         }
     }
 

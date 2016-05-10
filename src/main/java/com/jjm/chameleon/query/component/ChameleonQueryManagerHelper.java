@@ -11,11 +11,6 @@ public class ChameleonQueryManagerHelper {
     private final static String ALIAS_SEPARATOR = ".";
     private final static String COLUMN_SEPARATOR = ",";
     private final static String INCLUDE_ALL_COLUMNS = "*";
-    private final static String SPACE = " ";
-
-    private final static String SELECT = "SELECT";
-    private final static String FROM = "FROM";
-    private final static String JOIN = "JOIN";
 
     private static Set<Class<?>> ret;
     private Set<String> columns;
@@ -90,79 +85,29 @@ public class ChameleonQueryManagerHelper {
 
     public boolean existColumn(String field) {
         boolean includeColumn;
-        if (getColumns().size() == 1 && getColumns().iterator().next().equals(INCLUDE_ALL_COLUMNS)) {
+        if (getColumns().size() == 1 && getColumns().iterator().next().equals(INCLUDE_ALL_COLUMNS))
             includeColumn = true;
-        } else {
+        else
             includeColumn = getColumns().contains(field);
-        }
         return includeColumn;
     }
 
 
     public String getAlias(String fieldName) {
-        return getJoinTables().get(fieldName) != null ?  getJoinTables().get(fieldName).alias().getAlias() : null;
+        return existJoin(fieldName) ?  getJoinTables().get(fieldName).alias().getAlias() : null;
     }
 
-    public static String textBetweenWords(String sentence, String firstWord, String secondWord) {
-        return sentence.substring(sentence.indexOf(firstWord) + firstWord.length(), sentence.indexOf(secondWord));
+    public boolean existJoin(final String fieldName) {
+        return getJoinTables().get(fieldName) != null;
     }
 
-    public static String getFromClause(String str) {
-        List<String> from = getClauses(str, FROM);
-        String table;
-        if (str.contains(JOIN)) {
-            table = from.get(0).substring(0, from.get(0).indexOf(JOIN)).trim();
-        } else {
-            table = from.get(0).trim();
-        }
-        return table;
-    }
 
-    private static List<Integer> findOccurrences(String str, String findStr) {
-        int lastIndex = 0;
-        List<Integer> indexList = new ArrayList<>();
-        while (lastIndex != -1) {
-            lastIndex = str.indexOf(findStr, lastIndex);
-            if (lastIndex != -1) {
-                lastIndex += findStr.length();
-                indexList.add(lastIndex);
-            }
-        }
-        return indexList;
-    }
 
-    public static List<String> getClauses(String str, String findStr) {
-        List<Integer> joinIndex = findOccurrences(str, findStr);
-        List<String> join = new ArrayList<>();
-        int size = joinIndex.size();
-        for (int i = 0; i < size; i++) {
-            Integer indexClause = joinIndex.get(i);
-            Integer nextIndex = i + 1;
-            if (nextIndex <= size) {
-                Integer nextIndexClause = str.length();
-                if (nextIndex < size) {
-                    nextIndexClause = joinIndex.get(nextIndex) - findStr.length();
-                }
-                join.add(str.substring(indexClause, nextIndexClause).trim());
-            }
-        }
-        return join;
-    }
 
-    public static Query createQueryManager(String sql, Object source) {
-        String columns = textBetweenWords(sql, SELECT,  FROM);
-        String[] fromClause = getFromClause(sql).split(SPACE);
-        Query query = new Query();
-        Alias aliasQuery = query.select(columns).from(source).alias(fromClause[1]);
-        List<String> joins = getClauses(sql, JOIN);
-        for (String join : joins) {
-            String[] joinClauses = join.split(SPACE);
-            String clause = joinClauses[0];
-            String alias = joinClauses[1];
-            aliasQuery = aliasQuery.join(clause).alias(alias);
-        }
-        return query;
-    }
+
+
+
+
 
 
 }
